@@ -29,4 +29,10 @@ It includes a step-by-step procedure that describes how to emulate a Symbolics V
 
 - Emulate a Symbolics space-cadet keyboard using a Mac or PC keyboard
 
+- Send the Lisp Listener screen to the X Server of a LAN host
+
+- Install and set up a Telnet service onto a Debian-based host
+
+- Connect from OG2 to its Debian-based Genera-host via Telnet
+
 The repository includes screenshots showing what the OG2 screen looks like while implementing key steps and running saved worlds. However, it does not include the Open Genera 2 distribution. That is, in order to proceed you will need to download a tarball called opengenera2.tar.bz2 from a website referenced in the procedure and use it under your own responsibility regarding ownership rights.
