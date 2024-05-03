@@ -53,11 +53,11 @@ Adjust Preferences:		For example, modify settings as proposed below:
 - Desktop Preferences:		Text Font of label text:	Sans 8
 - Screensaver Preferences:	Fiberlamp Blank After: 		30 minutes
  
-Configure:	Internet > Wicd Network Manager:
-- Properties:	Use Static IPs:	IP: 	182.168.0.85
-				Netmask:255.255.255.0
-				Gateway:192.168.0.1		(e.g your router’s IP)
-		DNS domain: 	192.168.0.1			(same as of Gateway)
+Configure:	Internet > 	Wicd Network Manager:
+- Properties:	Use Static IPs:	IP: 				182.168.0.85
+				Netmask:			255.255.255.0
+				Gateway:			192.168.0.1 (e.g your router’s IP)
+				DNS domain: 			192.168.0.1 (same as of Gateway)
  
 - Preferences:	Wired interface: enp0s3	or enp3s0		See the NOTE below:
  
@@ -104,15 +104,15 @@ Upon installation completion, proceed as follows:
  
 Open the pop-up window if minimised, click OK to enter in the File Manager, eject the Debian ISO image by clicking left on Debian-x.y.z.
  
-Start:	System Tools > Dolphin
-- Configure Dolphin:		For example, modify settings as proposed below:
-- Select:	Details
-- Open:		Control > Configure Dolphin
-		Startup:	Editable location bar
-				Show full path inside location bar
-		General:	Use common properties for all folders
-				Alphabetical sorting, case insensitive
-When finished:			click Apply, and exit Dolphin
+Start:			System Tools > Dolphin
+- Configure Dolphin:	For example: 			Modify settings as proposed below:
+- Select:		Details
+- Open:			Control > Configure Dolphin
+			Startup:			Editable location bar
+							Show full path inside location bar
+			General:			Use common properties for all folders
+							Alphabetical sorting, case insensitive
+When finished:		click Apply, and exit Dolphin
  
 Close LXTerminal and shut down the Debian VM.
  
@@ -137,7 +137,7 @@ If necessary:
  
 Retrieve the kernel version:
 #  uname  -r
-4.9.0-4-amd64					; kernel version at the time of writing
+4.9.0-4-amd64					# kernel version at the time of writing
  
 Install the following packages but with the linux headers for the specific kernel:
  
@@ -230,7 +230,7 @@ Use Mac’s OS Terminal to create a Genera fonts.dir file for the XQuartz server
 $ sudo  mkfontdir  /usr/X11/share/fonts/genera
  
 Finally, in XQuartz > X11 Preferences select the options:
-- Input::		Enable key equivalents under X11
+- Input:		Enable key equivalents under X11
 - Security:		Authenticate connections, and
             		Allow connections from network clients
  
@@ -280,12 +280,16 @@ Edit /etc/xinetd.d/daytime and replace all occurrences of "disable = yes" with "
 Edit /etc/xinetd.d/time and replace all occurrences of "disable = yes" with "disable = no"
  
 # service xinetd restart
- 
+
+Configure the /etc/exports, /etc/network/interfaces, and /etc/hosts files of the Debian host Jupiter so that it can act as the Kronos VLM's Genera-host and access other hosts on the local area network (LAN):
+
+- Debian file /etc/exports:
 In /etc/exports include the following. If /home resides on a separate filesystem, you will have to list it explicitly in /etc/exports, as shown below:
  
 /	kronos(rw,sync,no_root_squash,no_subtree_check)
 /home	*(rw,sync,no_root_squash,no_subtree_check)
- 
+
+- Debian file /etc/network/interfaces:
 In Debian 8 configure the NICs eth0 and eth1 to suit your network topology. On systems using Predictable Network Interface Names, i.e Debian 9 or Debian 10, as explained in the previous NOTE, use instead the NIC names enp0s3, enp0s8, or enp3s0, as appropriate. 
  
 NOTE:	You only need a single VM NIC for networking between Genera and Genera-host and enable Genera talk to other Internet hosts. As shown below, this NIC, can be either dynamic (DHCP) or static. If static, assign to it an IP address of your LAN address space. If dynamic, you must, however, set up your router as appropriate to assign to the NIC always the same IP address.
@@ -310,7 +314,8 @@ iface eth0 inet static			# and comment the whole static configuration
         netmask 255.255.255.0
         gateway 192.168.0.1
         up echo 1
- 
+
+- Debian file /etc/hosts:
 Prepare to let the Debian host Jupiter become the genera-host of the OG2 VLM Kronos. I.e, in Jupiter's /etc/hosts include the following:
  
 # Entries for OG2 VLMs
@@ -381,8 +386,7 @@ Verify Debian’s /etc/hosts includes KRONOS’s IP address:
 Add Genera fonts and Meta-key to OpenGenera Linux VLM, i.e proceed as follows:
  
 Using Debian’s Xarchiver, unzip the archive genera.zip
-$  cd  /usr/share/fonts/
- 
+$  cd  /usr/share/fonts/ 
 $  sudo  mkdir  genera
 $  sudo  cp  $HOME/Downloads/og2vlm/genera/*.*  ./genera/
 $  cd
@@ -407,12 +411,12 @@ EOF
  
 Copy from folder $HOME/Downloads/og2vlm/ the appropriate file for your keyboard into $HOME. I.e one of the following:
  
-xmodmap.smbx		; to use a real Symbolics space-cadet keyboard
+xmodmap.smbx		# to use a real Symbolics space-cadet keyboard
 or
-xmodmap.macx		; for standard Mac or MacBook Pro US keyboards
+xmodmap.macx		# for standard Mac or MacBook Pro US keyboards
 or
-xmodmap.pcukx		; to use on PCs with a standard PC UK Keyboard
-			; on PCs with US Keyboards, modify as required.
+xmodmap.pcukx		# to use on PCs with a standard PC UK Keyboard
+			# on PCs with US Keyboards, modify as required.
  
 And move the following items to the destinations indicated below:
 $  mv  ~/Downloads/og2vlm/foo.*  ./Documents/
@@ -447,7 +451,7 @@ Close the LXTerminal and shut down the Debian VM Jupiter.
 Attach FEP disks and create a LMFS partition:
 ---------------------------------------------
  
-Boot Debian
+Boot the Debian host Jupiter and log in as "jm".
  
 Start OG2 for the first time, i.e in LXTerminal enter:
  
@@ -463,7 +467,7 @@ Toggle more processing 		; key in Function m (F3 m)
  
 Create and attach FEP disks:	
  
-Note, to create FEP disks bigger than 2 GB, use the command keyword :minimum-blocks, instead of :minimum-length. A FEP block equals to 2048 4xByte-Words = 8192 Bytes.
+NOTE: To create FEP disks bigger than 2 GB, use the command keyword :minimum-blocks, instead of :minimum-length. A FEP block equals to 2048 4xByte-Words = 8192 Bytes.
  
 Thus, using :minimum-length, the values below will create a FEP disk of 2 GB:
 >  (storage:attach-disk-channel (fs:parse-pathname “HOST:/home/jm/vlm/fep0.dsk”) :minimum-length (* 4 2048 250000))
@@ -498,8 +502,7 @@ Zeroing FEP0:>lmfs.file.1, 125000 blocks.	; if 625000 blocks, i.e 5GB LMFS parti
 Partition initialisation complete.
 Command:
  
-Exit Levels 3 and 2, i.e go back to the initial level and proceed, as follows:
- 
+Exit Levels 3 and 2, i.e go back to the initial level and proceed, as follows: 
 Tree Edit Root				; Click left to show the top-level LMFS directory
 DIS-LOCAL-HOST:>*.*.*			; Create Inferior Directory by right-clicking the
 jm					; current directory, key in the name, and Return.
@@ -637,8 +640,7 @@ Verify that following commands return system initialisation lists as last elemen
 >  copy  file  j:/home/jm/og2/sys.sct/site/*.translations  sys:site;
 >  load  file  j:/home/jm/Downloads/og2vlm/og2-translations.lisp
  
-Restore the OG2_SOURCE_DIST.TAPE using:
- 
+Restore the OG2_SOURCE_DIST.TAPE using: 
 >  select  activity  restore  distribution (...[default (..... (Genera on Kronos)])
  
 Set:			Read distribution from device:	Disk
@@ -664,7 +666,7 @@ Compile the script necessary to create the Symbolics world:
 Create a Symbolics world containing the most important systems:
 ---------------------------------------------------------------
  
-Reboot Debian
+Reboot the Debian host Jupiter and log in as "jm".
  
 Start OG2 VLM, i.e in LXTerminal enter:
 $  ./og2vlm.sh
@@ -787,7 +789,7 @@ $  sudo  iptables  -L
 You should get following activated chains and policies:
  
 Chain INPUT (policy ACCEPT)
-target     	prot opt source		destination         
+target  prot opt source		destination         
 ACCEPT	all  --  anywhere	anywhere            
 REJECT	all  --  anywhere	loopback/8	reject-with icmp-port-unreachable
 ACCEPT	all  --  anywhere	anywhere	state RELATED,ESTABLISHED
@@ -801,11 +803,11 @@ ACCEPT	all  --  anywhere	anywhere
  
 Verify the respective /etc/hosts on SERVER and Genera-host JUPITER include the following:
  
-192.168.6.2	kronos			; OG2 host's IP address and hostname
+192.168.6.2	kronos			# OG2 host's IP address and hostname
 .......
 .......
-192.168.0.5     server			; PC's or Mac's IP address and hostname
-192.168.0.85    jupiter			; Debian host’s IP address and hostname
+192.168.0.5     server			# PC's or Mac's IP address and hostname
+192.168.0.85    jupiter			# Debian host’s IP address and hostname
  
 Start the VLM and verify it can access Internet hosts via NFS, i.e enter:
 $  ./og2vlm.sh
@@ -855,12 +857,10 @@ Ping SERVER from within KRONOS, i.e enter:
 
 On SERVER, to ping JUPITER and KRONOS the other way around, enter:
 $ ping jupiter
-
 $ ping kronos
 
 Enter other commands, for example:
->  show  NFS  exports  server
- 
+>  show  NFS  exports  server 
 >  show directory s:/Users/*
 ....
 ....
@@ -879,7 +879,10 @@ Select L
 
 Emulate a Symbolics space-cadet keyboard using a Mac or PC keyboard:
 --------------------------------------------------------------------
- 
+
+For safety, save a copy of the actual Debian Xmodmap into your $HOME folder:
+$ xmodmap -pke > xmodmap.deb
+
 Re-enable shadowed OG2 accelerators by Debian LXDE shortcuts, among which the following:
  
 -  Avoid closing an active OG2 window via “Alt-F4”,  i.e OG2 “Meta-Suspend” used to enter the debugger while Lisp is waiting for user input.
@@ -911,8 +914,7 @@ $  ./og2vlm.sh
  
 Toggle more processing 		; key in Function m (F3 m)
  
-If you are using a real Symbolics space-cadet keyboard on a Mac or PC enter:
- 
+If you are using a real Symbolics space-cadet keyboard on a Mac or PC enter: 
 Show Keyboard Layout (a keyboard-layout) Symbolics	; to verify key strokes
  
 If you are using a standard Mac or PC keyboard, i.e with numeric keypad, Symbolics specific keys are located on the keys shown below:
@@ -954,7 +956,10 @@ or enter “Control-Shift-?” after the aforementioned command, to select a dif
 
 Halt OG2 on Kronos:  
 >  halt  genera  :query  no
- 
+
+Going back, you may wish to restore the initial Debian key mappings, using: 
+$ xmodmap ~/xmodmap.deb # restores the initial Debian key mappings.
+
 
 Send the Lisp Listener screen to the X Server of a LAN host:
 ------------------------------------------------------------
