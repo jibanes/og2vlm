@@ -21,6 +21,7 @@ Contentslist:
 
 
 Overview:
+
 This procedure describes how to install OpenGenera (OG2) onto Debian Linux, which can be run either as a Virtual Machine (VM) in VirtualBox or on its own disk or partition, i.e it  details how to emulate a Symbolics Virtual Lisp Machine (VLM) and run in unprivileged mode a tap-controlled, purely LMFS-based, and NFSv3-capable OpenGenera (OG2) in Debian, either on macOS or on Windows hosts. 
  
 If Debian runs on its own disk or partition, proceed as follows, ignoring any section and steps related to VirtualBox (VB) and VMs. Notice, however, that the description provided below is based on a sequential approach. That is, in order for a specific section to be successfully implemented, the steps of all the previous relevant sections must have been fully and correctly implemented. I.e, proceed step by step, as follows:
@@ -338,29 +339,35 @@ From now on, all the following actions will be run as "jm". Verify that "jm" is 
 Prepare Debian and OG2 to host the LMFS system:
 -----------------------------------------------
  
-Decompress the archive og2vlm-kit.tar.xz into the folder $HOME/Downloads/. The archive og2vlm-kit.tar.xz provides a ready to use OG2 distribution world named Genera-8-5e, which includes both NFSv3 Client and LMFS capability for the VLM, translations files, user initialisation file, genera binaries for X86 and Xeon based platforms, as well as functions and commands necessary to  create FEP disks, a LMFS partition, and an Initial world, without the need to disable Debian’s calendar clock prior to the installation and the subsequent launch of OpenGenera.
+Decompress the archive og2vlm-kit.zip into the folder $HOME/Downloads/. The archive og2vlm-kit.zip provides a ready to use OG2 distribution world named Genera-8-5e, which includes both NFSv3 Client and LMFS capability for the VLM, translations files, user initialisation file, genera binaries for X86 and Xeon based platforms, as well as functions and commands necessary to  create FEP disks, a LMFS partition, and an Initial world, without the need to disable Debian’s calendar clock prior to the installation and the subsequent launch of OpenGenera.
  
 I.e, on top of the original Symbolics distribution Genera-8-5, Genera-8-5e replaces the body of the function xlib:set-modifier-mapping by a no-op, extends the NFSv2 client, which almost is not more supported by the recent Linux operating systems, by a new NFSv3 client, and makes available to the user functions and commands to attach FEP disks, (up to 32 in total), initialise a LMFS partition and much more. See section “Attach FEP disks and create a LMFS partition” for details.
  
-Verify the archive’s og2vlm-kit.tar.xz checksum:
-MD5 (og2vlm-kit.tar.xz) = bb0d705e7f0a037d900b4d28fbdd842b
+Verify the archive’s og2vlm-kit.zip checksum:
+MD5 (og2vlm-kit.zip) = bd16f45374adfba7fd5035d3668fcd7e
  
-Using Debian’s Xarchiver, extract the archive og2vlm-kit.tar.xz. Its content will be made available in the folder $HOME/Downloads/og2vlm/.
- 
+Using Debian’s Xarchiver, extract the archive og2vlm-kit.zip. Its content will be made available in the  $HOME/Downloads/og2vlm/ folder.
+
+Move the items in og2vlm to $HOME/Downloads/:
+$ mv $HOME/Downloads/og2vlm/* ~/Downloads/
+
+Purge the empty og2vlm folder:
+$ rmdir $HOME/Downloads/og2vlm
+
 Create a folder "vlm" in your $HOME directory and proceed as follows:
 $ mkdir ~/vlm
  
-$  mv  $HOME/Downloads/og2vlm/Genera-8-5e.vlod  ~/vlm/
-$  mv  $HOME/Downloads/og2vlm/VLM_debugger  ~/vlm/
+$  mv  $HOME/Downloads/Genera-8-5e.vlod  ~/vlm/
+$  mv  $HOME/Downloads/VLM_debugger  ~/vlm/
  
 Depending on the platform's architecture, X86 or Xeon based, either do:
-$  rm  $HOME/Downloads/og2vlm/genera-xeon
-$  mv  $HOME/Downloads/og2vlm/genera-x86  ~/vlm/genera
+$  rm  $HOME/Downloads/genera-xeon
+$  mv  $HOME/Downloads/genera-x86  ~/vlm/genera
 or:
-$  rm  $HOME/Downloads/og2vlm/genera-x86
-$  mv  $HOME/Downloads/og2vlm/genera-xeon  ~/vlm/genera
+$  rm  $HOME/Downloads/genera-x86
+$  mv  $HOME/Downloads/genera-xeon  ~/vlm/genera
  
-$  mv  $HOME/Downloads/og2vlm/dot.VLM  ~/vlm/
+$  mv  $HOME/Downloads/dot.VLM  ~/vlm/
  
 $  mv  ~/vlm/dot.VLM ~/vlm/.VLM
  
@@ -369,7 +376,7 @@ Update .VLM to point to Genera-8-5e.vlod
 Make the genera binary executable:
 $  chmod  755  ~/vlm/genera
  
-Retrieve the og2 tarball opengenera2.tar.bz2 from https://archive.org/details/SymblicsOpenGenera
+Retrieve the OG2 tarball opengenera2.tar.bz2 from https://archive.org/details/SymblicsOpenGenera
  
 Verify the og2 tarball's checksum:
 MD5 (opengenera2.tar.bz2)  =  753411fbf964b15369b3a46997100ffa
@@ -388,7 +395,7 @@ Add Genera fonts and Meta-key to OpenGenera Linux VLM, i.e proceed as follows:
 Using Debian’s Xarchiver, unzip the archive genera.zip
 $  cd  /usr/share/fonts/ 
 $  sudo  mkdir  genera
-$  sudo  cp  $HOME/Downloads/og2vlm/genera/*.*  ./genera/
+$  sudo  cp  $HOME/Downloads/genera/*.*  ./genera/
 $  cd
  
 Create a genera fonts.dir file for the X server:
@@ -409,7 +416,7 @@ PATH=$PATH:/sbin:/usr/sbin
 export PATH
 EOF
  
-Copy from folder $HOME/Downloads/og2vlm/ the appropriate file for your keyboard into $HOME. I.e one of the following:
+Copy from folder $HOME/Downloads/ the appropriate file for your keyboard into $HOME. I.e one of the following:
  
 xmodmap.smbx		# to use a real Symbolics space-cadet keyboard
 or
@@ -419,8 +426,8 @@ xmodmap.pcukx		# to use on PCs with a standard PC UK Keyboard
 			# on PCs with US Keyboards, modify as required.
  
 And move the following items to the destinations indicated below:
-$  mv  ~/Downloads/og2vlm/foo.*  ./Documents/
-$  mv  ~/Downloads/og2vlm/og2vlm.sh  .
+$  mv  ~/Downloads/foo.*  ./Documents/
+$  mv  ~/Downloads/og2vlm.sh  .
  
 Make the shellscript "og2vlm.sh" executable:
 $  chmod  +x  og2vlm.sh
@@ -555,8 +562,8 @@ Standalone Site: Yes
  
 After defining a site, revoke mapping of :MULTI-KEY-CHARACTER-PREFACE (Compose Character) key to #\Function caused in SYS:X11;CLX;KEYSYMS:
  
->  load  file  jupiter:/home/jm/Downloads/og2vlm/undefine-keysym.lisp
-Loading JUPITER:/home/jm/Downloads/og2vlm/undefine-keysym.lisp into package XLIB
+>  load  file  jupiter:/home/jm/Downloads/undefine-keysym.lisp
+Loading JUPITER:/home/jm/Downloads/undefine-keysym.lisp into package XLIB
  
 Verify/update host Jupiter, as follows:
  
@@ -595,7 +602,7 @@ Proceed as follows:
 >  (si:full-gc)				; this step takes some time. Avoid interference!!
  
 Load the file required to Add OG2 Initialization Lists onto OG2:
->  load  file  j:/home/jm/Downloads/og2vlm/loadfepdisks
+>  load  file  j:/home/jm/Downloads/loadfepdisks
  
 Save the current world as:
 >  save  world (Default ....) Initial.vlod
@@ -633,12 +640,12 @@ Verify that following commands return system initialisation lists as last elemen
  
 >  Show Initialization List system			; includes user disk initialisation
  
->  copy  file  j:/home/jm/Downloads/og2vlm/nfsv3.translations  sys:site;
+>  copy  file  j:/home/jm/Downloads/nfsv3.translations  sys:site;
 >  load  file  sys:site;nfsv3.translations.newest
  
->  copy  file  j:/home/jm/Downloads/og2vlm/s.translations  sys:site;
+>  copy  file  j:/home/jm/Downloads/s.translations  sys:site;
 >  copy  file  j:/home/jm/og2/sys.sct/site/*.translations  sys:site;
->  load  file  j:/home/jm/Downloads/og2vlm/og2-translations.lisp
+>  load  file  j:/home/jm/Downloads/og2-translations.lisp
  
 Restore the OG2_SOURCE_DIST.TAPE using: 
 >  select  activity  restore  distribution (...[default (..... (Genera on Kronos)])
@@ -658,7 +665,7 @@ Revert the file sys.translations to its initial content:
 >  copy  file  sys:site;sys.translations.1  sys:site;sys.translations.3
  
 Compile the script necessary to create the Symbolics world:
->  compile  file  (File)  j:/home/jm/Downloads/og2vlm/w85.lisp
+>  compile  file  (File)  j:/home/jm/Downloads/w85.lisp
  
 >  halt  genera  :query  no
  
@@ -667,7 +674,12 @@ Create a Symbolics world containing the most important systems:
 ---------------------------------------------------------------
  
 Reboot the Debian host Jupiter and log in as "jm".
- 
+
+Create a folder symbolics with the following attributes:
+$ sudo mkdir /var/lib/symbolics
+$ sudo chown jm:jm /var/lib/symbolics
+$ chmod 777 /var/lib/symbolics
+
 Start OG2 VLM, i.e in LXTerminal enter:
 $  ./og2vlm.sh
  
@@ -679,7 +691,7 @@ Toggle more processing 		; key in Function m (F3 m)
  
 >  (setq  rpc::*unix-check-passwords-for-show*  nil)
  
->  Load  File  j:/home/jm/Downloads/og2vlm/w85
+>  Load  File  j:/home/jm/Downloads/w85
  
 Execute w85 by calling:
 >  (wform)
@@ -897,7 +909,7 @@ I.e, rename the original LXDE OpenBox config file:
 $  mv  $HOME/.config/openbox/lxde-rc.xml  $HOME/.config/openbox/lxde-rc.xml-orig
  
 and, move the modified LXDE OpenBox config file to this destination:
-$  mv $HOME/Downloads/og2vlm/lxde-rc.xml  $HOME/.config/openbox/
+$  mv $HOME/Downloads/lxde-rc.xml  $HOME/.config/openbox/
  
 Also notice, to be able to use the Genera keyboard accelerators c-m-A, c-m-P and c-m-F in Zmacs and the OG2 Debugger, do the following:
  
@@ -905,7 +917,7 @@ Rename the original Debian CLIPIT config file:
 $  mv  $HOME/.config/clipit/clipitrc  $HOME/.config/clipit/clipitrc-orig
  
 Move the modified LXDE OpenBox config file to this destination:
-$  mv  $HOME/Downloads/og2vlm/clipitrc  $HOME/.config/clipit/
+$  mv  $HOME/Downloads/clipitrc  $HOME/.config/clipit/
  
 Warm-boot OG2 VLM after the above changes, i.e in LXTerminal enter:
 $  ./og2vlm.sh
